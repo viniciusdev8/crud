@@ -5,27 +5,32 @@ require_once "../db/connection.php";
 $nome=$_POST['userName'];
 $senha=$_POST['pw'];
 
-$sql="SELECT nome, senha FROM usuarios WHERE nome=:nome";
+try {
+    $sql="SELECT nome, senha FROM usuarios WHERE nome=:nome";
 
-$stmt=$conn->prepare($sql);
-$stmt->bindParam(":nome", $nome);
-$stmt->execute();
+    $stmt=$conn->prepare($sql);
+    $stmt->bindParam(":nome", $nome);
+    $stmt->execute();
 
-$userInfo=$stmt->fetch(PDO::FETCH_ASSOC);
+    $userInfo=$stmt->fetch(PDO::FETCH_ASSOC);
 
-$valido=false;
+    $valido=false;
 
-if($userInfo){
-    $valido=password_verify($senha, $userInfo['senha']);
-}
+    if($userInfo){
+        $valido=password_verify($senha, $userInfo['senha']);
+    }
 
-if($valido) {
-    $_SESSION['username']=$userInfo['nome'];
-    header("Location: ../user/main.php");
-    exit();
+    if($valido) {
+        $_SESSION['username']=$userInfo['nome'];
+        header("Location: ../user/main.php");
+        exit();
 
-} else {
-    die("Usuário ou senha inválidos.");
-}
+    } else {
+        die("Usuário ou senha inválidos.");
+    }
+
+}catch(PDOException $e) {
+    echo "Error: " . $e->getMessage();
+} 
 
 ?>
