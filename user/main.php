@@ -22,6 +22,7 @@ $userInfo=$stmt->fetch(PDO::FETCH_ASSOC);
 <body>
     <h1>Olá, <?= $userInfo['nome'] ?>!</h1>
     <a href="alterarDados.php">Alterar Dados</a>
+    <br>
     <a href="../actions/logout.php">Sair</a>
 </body>
 </html>
