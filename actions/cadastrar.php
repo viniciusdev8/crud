@@ -21,7 +21,6 @@ try{
     $conn->commit();
 
     $_SESSION['username']=$nome;
-    $_SESSION['pwHash']=$pwHash;
 
     header("Location: ../user/main.php");
     exit();
