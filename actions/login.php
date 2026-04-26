@@ -2,11 +2,11 @@
 session_start();
 require_once "../db/connection.php";
 
-$nome=$_POST['userName'];
-$senha=$_POST['pw'];
+$nome=$_POST['userName']??'';
+$senha=$_POST['pw']??'';
 
 try {
-    $sql="SELECT nome, senha FROM usuarios WHERE nome=:nome";
+    $sql="SELECT id, nome, senha FROM usuarios WHERE nome=:nome";
 
     $stmt=$conn->prepare($sql);
     $stmt->bindParam(":nome", $nome);
@@ -18,10 +18,14 @@ try {
 
     if($userInfo){
         $valido=password_verify($senha, $userInfo['senha']);
-    }
+
+    } else{
+        $valido=false;
+        }
 
     if($valido) {
         $_SESSION['username']=$userInfo['nome'];
+        $_SESSION['userId']=$userInfo['id'];
         header("Location: ../user/main.php");
         exit();
 
@@ -30,7 +34,7 @@ try {
     }
 
 }catch(PDOException $e) {
-    echo "Error: " . $e->getMessage();
+    echo "ERRO: " . $e->getMessage();
 } 
 
 ?>
